@@ -1,0 +1,6 @@
+# Personal save progress
+progress.dat
+
+# Object files
+*.o
+*.obj
