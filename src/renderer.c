@@ -253,10 +253,10 @@ void Renderer_DrawTruthTable(const LevelDef *level, const VerificationResult *re
     if (!level || !res) return;
 
     Gfx_DrawRoundedRect(x, y, w, h, 8, COL_BG_PANEL, COL_BORDER);
-    Gfx_DrawTextCentered(x + w / 2, y + 22, "BANG CHAN TRI (TRUTH TABLE)", 2, COL_TEXT_GOLD);
+    Gfx_DrawTextCentered(x + w / 2, y + 22, "BẢNG CHÂN TRỊ (TRUTH TABLE)", 2, COL_TEXT_GOLD);
 
     char summary[64];
-    snprintf(summary, sizeof(summary), "Ket qua: %d / %d to hop DUNG", res->passed_rows, res->total_rows);
+    snprintf(summary, sizeof(summary), "Kết quả: %d / %d tổ hợp ĐÚNG", res->passed_rows, res->total_rows);
     Color32 sum_col = res->all_passed ? COL_ACCENT_GREEN : COL_TEXT_MUTED;
     Gfx_DrawTextCentered(x + w / 2, y + 44, summary, 1, sum_col);
 
@@ -276,13 +276,13 @@ void Renderer_DrawTruthTable(const LevelDef *level, const VerificationResult *re
     }
     for (int o = 0; o < level->num_outputs; o++) {
         char hdr[16];
-        snprintf(hdr, sizeof(hdr), "%s(Mau)", level->output_labels[o]);
+        snprintf(hdr, sizeof(hdr), "%s(Mẫu)", level->output_labels[o]);
         Gfx_DrawTextCentered(table_x + col_idx * col_w + col_w / 2, table_y + row_h / 2, hdr, 1, COL_TEXT_GOLD);
         col_idx++;
     }
     for (int o = 0; o < level->num_outputs; o++) {
         char hdr[16];
-        snprintf(hdr, sizeof(hdr), "%s(Mach)", level->output_labels[o]);
+        snprintf(hdr, sizeof(hdr), "%s(Mạch)", level->output_labels[o]);
         Gfx_DrawTextCentered(table_x + col_idx * col_w + col_w / 2, table_y + row_h / 2, hdr, 1, COL_TEXT_WHITE);
         col_idx++;
     }

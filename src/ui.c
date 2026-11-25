@@ -59,7 +59,7 @@ void Game_LoadLevel(GameContext *game, int level_idx) {
     Levels_SetupCircuit(lvl, &game->circuit);
     Levels_VerifyCircuit(lvl, &game->circuit, &game->verify_res);
 
-    Game_SetStatus(game, "Click vao cong logic o thanh duoi de dat len mach. Keo tu chan Phai sang chan Trai de noi day!");
+    Game_SetStatus(game, "Click vào cổng logic ở thanh dưới để đặt lên mạch. Kéo từ chân Phải sang chân Trái để nối dây!");
 }
 
 void Game_StartSandbox(GameContext *game) {
@@ -77,7 +77,7 @@ void Game_StartSandbox(GameContext *game) {
     Circuit_AddComponent(&game->circuit, COMP_OUTPUT, 1080.0f, 235.0f, true, "Y1");
     Circuit_AddComponent(&game->circuit, COMP_OUTPUT, 1080.0f, 365.0f, true, "Y2");
 
-    Game_SetStatus(game, "Che do SANDBOX: Tu do lap rap va thu nghiem bat ky mach logic nao!");
+    Game_SetStatus(game, "Chế độ SANDBOX: Tự do lắp ráp và thử nghiệm bất kỳ mạch logic nào!");
 }
 
 static void DrawMainMenu(GameContext *game, const InputState *input, double now) {
@@ -87,7 +87,7 @@ static void DrawMainMenu(GameContext *game, const InputState *input, double now)
     /* Tieu de lon */
     Gfx_DrawRoundedRect(240, 85, 800, 145, 12, COL_BG_PANEL, COL_ACCENT_BLUE);
     Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 130, "CIRCUIT PUZZLE: LOGIC ARCHITECT", 4, COL_WIRE_HIGH);
-    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 172, "Project Ngôn Ngữ C - Khoa Điện - Điện Tử HCMUT (Nhóm 5 Sinh Vien)", 2, COL_TEXT_GOLD);
+    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 172, "Project Ngôn Ngữ C - Khoa Điện - Điện Tử HCMUT (Nhóm 5 Sinh Viên)", 2, COL_TEXT_GOLD);
     Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 202, "Thiết kế mạch logic số, kiểm tra Bảng Chân Trị & chinh phục 15 thử thách KTS!", 1, COL_TEXT_MUTED);
 
     /* Ve minh hoa 1 day xung dien chay o giua Menu */
@@ -144,9 +144,9 @@ static void DrawLevelSelect(GameContext *game, const InputState *input) {
     Gfx_DrawText(SCREEN_WIDTH - 230, 42, star_buf, 2, COL_WIRE_HIGH);
 
     const char *chap_names[3] = {
-        "CHƯƠNG 1: CƠ BẢN - NHẬP MÔN CÔNG LOGIC (MAN 1 - 5)",
-        "CHƯƠNG 2: TRUNG CẤP - BIẾN ĐỔI BOOLE & DE MORGAN (MAN 6 - 10)",
-        "CHƯƠNG 3: KỸ SƯ KTS BÁCH KHOA - MẠCH CHỨC NĂNG (MAN 11 - 15)"
+        "CHƯƠNG 1: CƠ BẢN - NHẬP MÔN CỔNG LOGIC (MÀN 1 - 5)",
+        "CHƯƠNG 2: TRUNG CẤP - BIẾN ĐỔI BOOLE & DE MORGAN (MÀN 6 - 10)",
+        "CHƯƠNG 3: KỸ SƯ KTS BÁCH KHOA - MẠCH CHỨC NĂNG (MÀN 11 - 15)"
     };
 
     for (int chap = 0; chap < 3; chap++) {
@@ -294,13 +294,13 @@ static void DrawToolbox(GameContext *game, const InputState *input) {
         if (lvl) {
             char qbuf[32];
             if (allowed == 0) {
-                snprintf(qbuf, sizeof(qbuf), "Cam dung");
+                snprintf(qbuf, sizeof(qbuf), "Cấm dùng");
             } else {
-                snprintf(qbuf, sizeof(qbuf), "Con: %d/%d", allowed - used, allowed);
+                snprintf(qbuf, sizeof(qbuf), "Còn: %d/%d", allowed - used, allowed);
             }
             Gfx_DrawText(gx + 86, gy + 18, qbuf, 1, can_use ? COL_WIRE_HIGH : COL_ACCENT_RED);
         } else {
-            Gfx_DrawText(gx + 92, gy + 18, "Vo han", 1, COL_WIRE_HIGH);
+            Gfx_DrawText(gx + 92, gy + 18, "Vô hạn", 1, COL_WIRE_HIGH);
         }
 
         if (hover && input->left_pressed && !game->level_completed_modal) {
@@ -355,7 +355,7 @@ static void DrawPlayingOrSandbox(GameContext *game, const InputState *input, dou
         Game_SetStatus(game, "Đã xóa tất cả linh kiện và dây nối để làm lại.");
     }
     if (!is_sandbox) {
-        if (DrawButton(1150, 22, 98, 36, "CHẤM DIỂM", RGB32(24, 130, 82), input) || input->key_space_pressed) {
+        if (DrawButton(1150, 22, 98, 36, "CHẤM ĐIỂM", RGB32(24, 130, 82), input) || input->key_space_pressed) {
             CheckAndTriggerVictory(game);
         }
     }

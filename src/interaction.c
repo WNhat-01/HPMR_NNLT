@@ -44,11 +44,11 @@ bool Interaction_SpawnGateFromToolbox(GameContext *game, ComponentType type) {
         int max_allowed = lvl->allowed_gates[type];
         int used = Circuit_CountGateByType(&game->circuit, type);
         if (max_allowed == 0) {
-            Game_SetStatus(game, "Man choi nay khong cho phep su dung cong nay!");
+            Game_SetStatus(game, "Màn chơi này không cho phép sử dụng cổng này!");
             return false;
         }
         if (max_allowed > 0 && used >= max_allowed) {
-            Game_SetStatus(game, "Da dat gioi han so luong cong loai nay trong man!");
+            Game_SetStatus(game, "Đã đạt giới hạn số lượng cổng loại này trong màn!");
             return false;
         }
     }
@@ -63,8 +63,8 @@ bool Interaction_SpawnGateFromToolbox(GameContext *game, ComponentType type) {
         if (game->screen == STATE_PLAYING) {
             Levels_VerifyCircuit(Levels_Get(game->current_level_idx), &game->circuit, &game->verify_res);
         }
-        char msg[96];
-        snprintf(msg, sizeof(msg), "Da them cong %s! Keo tha de di chuyen, Chuot phai de xoa.", Circuit_GetTypeName(type));
+        char msg[112];
+        snprintf(msg, sizeof(msg), "Đã thêm cổng %s! Kéo thả để di chuyển, Chuột phải để xóa.", Circuit_GetTypeName(type));
         Game_SetStatus(game, msg);
         return true;
     }
@@ -152,7 +152,7 @@ void Interaction_UpdateBoard(GameContext *game, const InputState *input) {
                 /* Click chan Output -> Bat dau keo day */
                 ed->is_wiring = true;
                 ed->wire_from_comp_id = ed->hovered_pin_comp_id;
-                Game_SetStatus(game, "Dang noi day: Hay click hoac tha chuot vao chan Input (ben trai cong dich)!");
+                Game_SetStatus(game, "Đang nối dây: Hãy click hoặc thả chuột vào chân Input (bên trái cổng đích)!");
                 return;
             } else if (ed->is_wiring && ed->hovered_pin_index >= 0) {
                 /* Dang keo day ma click vao chan Input -> Hoan tat noi day! */
@@ -160,7 +160,7 @@ void Interaction_UpdateBoard(GameContext *game, const InputState *input) {
                     if (game->screen == STATE_PLAYING) {
                         Levels_VerifyCircuit(Levels_Get(game->current_level_idx), circuit, &game->verify_res);
                     }
-                    Game_SetStatus(game, "Da noi day thanh cong!");
+                    Game_SetStatus(game, "Đã nối dây thành công!");
                 }
                 ed->is_wiring = false;
                 ed->wire_from_comp_id = -1;
@@ -172,7 +172,7 @@ void Interaction_UpdateBoard(GameContext *game, const InputState *input) {
         if (ed->is_wiring) {
             ed->is_wiring = false;
             ed->wire_from_comp_id = -1;
-            Game_SetStatus(game, "Da huy thao tac noi day.");
+            Game_SetStatus(game, "Đã hủy thao tác nối dây.");
             return;
         }
 
@@ -183,8 +183,8 @@ void Interaction_UpdateBoard(GameContext *game, const InputState *input) {
                 /* Bat/tat cong tac Input 0 <-> 1 */
                 c->output_value = c->output_value ? 0 : 1;
                 Circuit_Simulate(circuit);
-                char msg[80];
-                snprintf(msg, sizeof(msg), "Da chuyen cong tac %s sang muc logic %d.", c->label, c->output_value);
+                char msg[96];
+                snprintf(msg, sizeof(msg), "Đã chuyển công tắc %s sang mức logic %d.", c->label, c->output_value);
                 Game_SetStatus(game, msg);
             } else if (!c->locked || game->screen == STATE_SANDBOX) {
                 /* Bat dau keo tha linh kien */
@@ -202,7 +202,7 @@ void Interaction_UpdateBoard(GameContext *game, const InputState *input) {
                 if (game->screen == STATE_PLAYING) {
                     Levels_VerifyCircuit(Levels_Get(game->current_level_idx), circuit, &game->verify_res);
                 }
-                Game_SetStatus(game, "Da noi day thanh cong!");
+                Game_SetStatus(game, "Đã nối dây thành công!");
             }
             ed->is_wiring = false;
             ed->wire_from_comp_id = -1;
@@ -223,7 +223,7 @@ void Interaction_UpdateBoard(GameContext *game, const InputState *input) {
                 if (game->screen == STATE_PLAYING) {
                     Levels_VerifyCircuit(Levels_Get(game->current_level_idx), circuit, &game->verify_res);
                 }
-                Game_SetStatus(game, "Da thao day noi tai chan Input.");
+                Game_SetStatus(game, "Đã tháo dây nối tại chân Input.");
             }
             return;
         }
@@ -236,9 +236,9 @@ void Interaction_UpdateBoard(GameContext *game, const InputState *input) {
                 if (game->screen == STATE_PLAYING) {
                     Levels_VerifyCircuit(Levels_Get(game->current_level_idx), circuit, &game->verify_res);
                 }
-                Game_SetStatus(game, "Da xoa linh kien khoi bang mach.");
+                Game_SetStatus(game, "Đã xóa linh kiện khỏi bảng mạch.");
             } else {
-                Game_SetStatus(game, "Khong the xoa ngo INPUT/OUTPUT co dinh cua de bai!");
+                Game_SetStatus(game, "Không thể xóa ngõ INPUT/OUTPUT cố định của đề bài!");
             }
         }
     }
