@@ -60,6 +60,19 @@ void Renderer_DrawBoardGrid(int x, int y, int w, int h) {
     }
 }
 
+/* Hàm hỗ trợ vẽ đường cong mượt mà bằng toán học */
+static void DrawCurve(float x1, float y1, float x2, float y2, float cx, float cy, int thickness, Color32 color) {
+    int segments = 15; /* Số nét vẽ chia nhỏ */
+    float px = x1, py = y1;
+    for (int i = 1; i <= segments; i++) {
+        float t = (float)i / segments;
+        float nx = (1-t)*(1-t)*x1 + 2*(1-t)*t*cx + t*t*x2;
+        float ny = (1-t)*(1-t)*y1 + 2*(1-t)*t*cy + t*t*y2;
+        Gfx_DrawLine((int)px, (int)py, (int)nx, (int)ny, thickness, color);
+        px = nx; py = ny;
+    }
+}
+
 static void DrawComponentItem(const Component *c, bool is_hovered, const EditorState *editor) {
     int x = (int)c->x;
     int y = (int)c->y;
@@ -103,20 +116,68 @@ static void DrawComponentItem(const Component *c, bool is_hovered, const EditorS
         char buf[32];
         snprintf(buf, sizeof(buf), "%s=%d", c->label, c->output_value);
         Gfx_DrawText(x + 42, y + h / 2 - 9, buf, 2, c->output_value ? COL_WIRE_PULSE : COL_TEXT_MUTED);
+    
+    // ... [Phần trên của hàm giữ nguyên (vẽ Input, Output)] ...
+
     } else {
-        /* Ve Cong Logic (AND, OR, NOT, XOR, NAND, NOR, XNOR) */
+        /* Ve Cong Logic (AND, OR, NOT, XOR, NAND, NOR, XNOR) bang code thuan (Cach 2) */
         Color32 brd = c->output_value ? COL_WIRE_HIGH : border_col;
-        Gfx_DrawRoundedRect(x, y, w, h, 8, RGB32(28, 38, 52), brd);
-        /* Thanh mau nhan dien loai cong o phia tren */
-        Gfx_DrawRect(x + 3, y + 3, w - 6, 12, base_col);
+        int cx = x + w / 2;
+        int cy = y + h / 2;
 
-        Gfx_DrawTextCentered(x + w / 2, y + h / 2 + 4, Circuit_GetTypeName(c->type), 2, COL_TEXT_WHITE);
+        /* Xoa vung chu nhat mac dinh de de len bang hinh dang rieng */
+        Gfx_DrawRoundedRect(x, y, w, h, 8, RGB32(28, 38, 52), RGB32(28, 38, 52)); 
 
-        /* Neu la cong dao (NOT, NAND, NOR, XNOR), ve vong tron Bubble dao o dau ra */
+        switch (c->type) {
+            case COMP_NOT:
+                /* Tam giac cho NOT */
+                Gfx_DrawLine(x + 10, y + 10, x + w - 15, cy, 2, brd);
+                Gfx_DrawLine(x + 10, y + h - 10, x + w - 15, cy, 2, brd);
+                Gfx_DrawLine(x + 10, y + 10, x + 10, y + h - 10, 2, brd);
+                break;
+                
+            case COMP_AND:
+            case COMP_NAND:
+                /* Lưng phẳng, mũi cong (Dùng hàm DrawCurve kéo tròn ra phía trước) */
+                Gfx_DrawLine(x + 10, y + 10, x + 10, y + h - 10, 2, brd);
+                Gfx_DrawLine(x + 10, y + 10, cx, y + 10, 2, brd);
+                Gfx_DrawLine(x + 10, y + h - 10, cx, y + h - 10, 2, brd);
+                DrawCurve(cx, y + 10, cx, y + h - 10, x + w + 15, cy, 2, brd);
+                break;
+                
+            case COMP_OR:
+            case COMP_NOR:
+                /* Lưng móp vào trong, 2 cạnh cong vuốt ra chóp */
+                DrawCurve(x + 5, y + 10, x + 5, y + h - 10, x + 25, cy, 2, brd);         
+                DrawCurve(x + 5, y + 10, x + w - 15, cy, cx + 5, y - 5, 2, brd);         
+                DrawCurve(x + 5, y + h - 10, x + w - 15, cy, cx + 5, y + h + 5, 2, brd); 
+                break;
+                
+            case COMP_XOR:
+            case COMP_XNOR:
+                /* Giống OR nhưng thêm đường song song cách 7 pixel */
+                DrawCurve(x + 5, y + 10, x + 5, y + h - 10, x + 25, cy, 2, brd); 
+                DrawCurve(x + 12, y + 10, x + 12, y + h - 10, x + 32, cy, 2, brd);       
+                
+                DrawCurve(x + 12, y + 10, x + w - 15, cy, cx + 10, y - 5, 2, brd);
+                DrawCurve(x + 12, y + h - 10, x + w - 15, cy, cx + 10, y + h + 5, 2, brd);
+                break;
+            default:
+                break;
+        }
+
+        /* Diem nhan mau sac de biet dang hoat dong hay khong (Fix warning base_col) */
+        Gfx_DrawCircle(cx, cy, 3, base_col);
+
+        /* Vong tron (Bubble) dao nguoc cho cac cong NOT, NAND, NOR, XNOR */
         if (c->type == COMP_NOT || c->type == COMP_NAND || c->type == COMP_NOR || c->type == COMP_XNOR) {
-            Gfx_DrawCircle(x + w - 5, y + h / 2, 4, COL_TEXT_WHITE);
+            Gfx_DrawCircle(x + w - 10, cy, 5, RGB32(28, 38, 52)); /* Xoa nen trong */
+            Gfx_DrawCircleOutline(x + w - 10, cy, 5, 2, COL_TEXT_WHITE); /* Vien trang */
         }
     }
+
+    /* Ve cac chan Input Pin (ben trai) */
+// ... [Phần dưới của hàm giữ nguyên (vẽ Node đầu vào, đầu ra)] ...
 
     /* Ve cac chan Input Pin (ben trai) */
     for (int p = 0; p < c->num_inputs; p++) {

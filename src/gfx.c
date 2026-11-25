@@ -140,18 +140,19 @@ bool Gfx_Init(const char *title, int width, int height) {
     ReleaseDC(g_hwnd, hdc);
 
     /* Khoi tao 4 kich co Font Segoe UI */
-    g_fonts[1] = CreateFontA(-14, 0, 0, 0, FW_SEMIBOLD, FALSE, FALSE, FALSE,
-                             ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, "Segoe UI");
-    g_fonts[2] = CreateFontA(-17, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-                             ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, "Segoe UI");
-    g_fonts[3] = CreateFontA(-22, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-                             ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, "Segoe UI");
-    g_fonts[4] = CreateFontA(-30, 0, 0, 0, FW_EXTRABOLD, FALSE, FALSE, FALSE,
-                             ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, "Segoe UI");
+    /* Khoi tao 4 kich co Font Segoe UI ho tro Unicode */
+    g_fonts[1] = CreateFontW(-14, 0, 0, 0, FW_SEMIBOLD, FALSE, FALSE, FALSE,
+                             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+    g_fonts[2] = CreateFontW(-17, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+                             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+    g_fonts[3] = CreateFontW(-22, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+                             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+    g_fonts[4] = CreateFontW(-30, 0, 0, 0, FW_EXTRABOLD, FALSE, FALSE, FALSE,
+                             DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+                             CLEARTYPE_QUALITY, DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
 
     ShowWindow(g_hwnd, SW_SHOW);
     UpdateWindow(g_hwnd);
@@ -370,10 +371,14 @@ void Gfx_DrawText(int x, int y, const char *text, int font_size, Color32 color) 
     if (font_size < 1) font_size = 1;
     if (font_size > 4) font_size = 4;
 
+    /* Chuyen doi chuoi UTF-8 (char) sang UTF-16 (wchar_t) de Win32 GDI doc duoc Tieng Viet */
+    wchar_t wtext[512];
+    MultiByteToWideChar(CP_UTF8, 0, text, -1, wtext, 512);
+
     GdiFlush();
     SelectObject(g_mem_dc, g_fonts[font_size]);
     SetTextColor(g_mem_dc, ToGdiColor(color));
-    TextOutA(g_mem_dc, x, y, text, (int)strlen(text));
+    TextOutW(g_mem_dc, x, y, wtext, lstrlenW(wtext));
     GdiFlush();
 }
 
@@ -382,17 +387,42 @@ void Gfx_DrawTextCentered(int cx, int cy, const char *text, int font_size, Color
     if (font_size < 1) font_size = 1;
     if (font_size > 4) font_size = 4;
 
+    /* Chuyen doi chuoi UTF-8 sang UTF-16 */
+    wchar_t wtext[512];
+    MultiByteToWideChar(CP_UTF8, 0, text, -1, wtext, 512);
+
     GdiFlush();
     SelectObject(g_mem_dc, g_fonts[font_size]);
     SIZE sz;
-    int len = (int)strlen(text);
-    GetTextExtentPoint32A(g_mem_dc, text, len, &sz);
+    int wlen = lstrlenW(wtext);
+    GetTextExtentPoint32W(g_mem_dc, wtext, wlen, &sz);
 
     SetTextColor(g_mem_dc, ToGdiColor(color));
-    TextOutA(g_mem_dc, cx - sz.cx / 2, cy - sz.cy / 2, text, len);
+    TextOutW(g_mem_dc, cx - sz.cx / 2, cy - sz.cy / 2, wtext, wlen);
     GdiFlush();
 }
 
 bool Gfx_PointInRect(int mx, int my, int x, int y, int w, int h) {
     return (mx >= x && mx <= x + w && my >= y && my <= y + h);
+}
+
+void Gfx_DrawTextWrapped(int x, int y, int w, int h, const char *text, int font_size, Color32 color) {
+    if (!text || !g_mem_dc) return;
+    if (font_size < 1) font_size = 1;
+    if (font_size > 4) font_size = 4;
+
+    /* Chuyen doi chuoi UTF-8 sang UTF-16 */
+    wchar_t wtext[1024]; /* Chuan bi buffer lon hon mot chut de chua chuoi dai */
+    MultiByteToWideChar(CP_UTF8, 0, text, -1, wtext, 1024);
+
+    GdiFlush();
+    SelectObject(g_mem_dc, g_fonts[font_size]);
+    SetTextColor(g_mem_dc, ToGdiColor(color));
+
+    /* Dinh nghia khung hinh chu nhat gioi han chu */
+    RECT rect = { x, y, x + w, y + h };
+    
+    /* Su dung DrawTextW voi DT_WORDBREAK de tu dong xuong dong */
+    DrawTextW(g_mem_dc, wtext, -1, &rect, DT_LEFT | DT_TOP | DT_WORDBREAK);
+    GdiFlush();
 }

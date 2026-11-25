@@ -1,12 +1,12 @@
 /*
- * ============================================================================
- * MODULE 5: UI SCREENS, MENU & GAME STATE FLOW (ui.c)
- * Phu trach: Thanh vien 5
- * Noi dung:
- *   - Quan ly chuyen canh: Main Menu -> Level Select -> Playing -> Victory Modal
- *   - Thanh cong cu Toolbox, Dong ho dem gio (< 5 phut), Tinh diem 1-3 Sao
- *   - Che do Sandbox tu do va Che do Demo Giang Vien (Unlock All)
- * ============================================================================
+- ============================================================================
+- MODULE 5: UI SCREENS, MENU & GAME STATE FLOW (ui.c)
+- Phu trach: Thanh vien 5
+- Noi dung:
+-   - Quan ly chuyen canh: Main Menu -> Level Select -> Playing -> Victory Modal
+-   - Thanh cong cu Toolbox, Dong ho dem gio (< 5 phut), Tinh diem 1-3 Sao
+-   - Che do Sandbox tu do va Che do Demo Giang Vien (Unlock All)
+- ============================================================================
  */
 
 #include "../include/game.h"
@@ -70,7 +70,7 @@ void Game_StartSandbox(GameContext *game) {
     Interaction_Reset(&game->editor);
     Circuit_Init(&game->circuit);
 
-    /* Tao san 3 Input A, B, C va 2 Output Y1, Y2 cho che do Sandbox */
+    /* Tạo sẵn 3 Input A, B, C va 2 Output Y1, Y2 cho che do Sandbox */
     Circuit_AddComponent(&game->circuit, COMP_INPUT, 65.0f, 185.0f, true, "A");
     Circuit_AddComponent(&game->circuit, COMP_INPUT, 65.0f, 295.0f, true, "B");
     Circuit_AddComponent(&game->circuit, COMP_INPUT, 65.0f, 405.0f, true, "C");
@@ -87,8 +87,8 @@ static void DrawMainMenu(GameContext *game, const InputState *input, double now)
     /* Tieu de lon */
     Gfx_DrawRoundedRect(240, 85, 800, 145, 12, COL_BG_PANEL, COL_ACCENT_BLUE);
     Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 130, "CIRCUIT PUZZLE: LOGIC ARCHITECT", 4, COL_WIRE_HIGH);
-    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 172, "Project Ngon Ngu C - Khoa Dien - Dien Tu HCMUT (Nhom 5 Sinh Vien)", 2, COL_TEXT_GOLD);
-    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 202, "Thiet ke mach logic so, kiem tra Bang Chan Tri & chinh phuc 15 thu thach KTS!", 1, COL_TEXT_MUTED);
+    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 172, "Project Ngôn Ngữ C - Khoa Điện - Điện Tử HCMUT (Nhóm 5 Sinh Vien)", 2, COL_TEXT_GOLD);
+    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 202, "Thiết kế mạch logic số, kiểm tra Bảng Chân Trị & chinh phục 15 thử thách KTS!", 1, COL_TEXT_MUTED);
 
     /* Ve minh hoa 1 day xung dien chay o giua Menu */
     Gfx_DrawBezierWire(290.0f, 265.0f, 990.0f, 265.0f, true, now);
@@ -97,28 +97,28 @@ static void DrawMainMenu(GameContext *game, const InputState *input, double now)
     int bw = 420;
     int bh = 54;
 
-    if (DrawButton(bx, 300, bw, bh, "CHON MAN CHOI (15 MAN KTS)", RGB32(28, 115, 78), input)) {
+    if (DrawButton(bx, 300, bw, bh, "CHỌN MÀN CHƠI (15 MÀN KTS)", RGB32(28, 115, 78), input)) {
         game->screen = STATE_LEVEL_SELECT;
     }
 
-    if (DrawButton(bx, 372, bw, bh, "PHONG THI NGHIEM TU DO (SANDBOX)", COL_BG_CARD, input)) {
+    if (DrawButton(bx, 372, bw, bh, "PHÒNG THÍ NGHIỆM TỰ DO (SANDBOX)", COL_BG_CARD, input)) {
         Game_StartSandbox(game);
     }
 
-    if (DrawButton(bx, 444, bw, bh, "MO KHOA TAT CA 15 MAN (DEMO GIANG VIEN)", RGB32(95, 68, 25), input)) {
+    if (DrawButton(bx, 444, bw, bh, "MỞ KHOÁ TẤT CẢ 15 MÀN (DEMO GIẢNG VIÊN)", RGB32(95, 68, 25), input)) {
         game->progress.unlocked_level = TOTAL_LEVELS;
         Progress_Save(&game->progress, SAVE_FILE_PATH);
         game->screen = STATE_LEVEL_SELECT;
     }
 
-    if (DrawButton(bx, 516, bw, bh, "DAT LAI TIEN DO (RESET SAVE)", RGB32(85, 36, 46), input)) {
+    if (DrawButton(bx, 516, bw, bh, "ĐẶT LẠI TIẾN ĐỘ (RESET SAVE)", RGB32(85, 36, 46), input)) {
         Progress_InitDefault(&game->progress);
         Progress_Save(&game->progress, SAVE_FILE_PATH);
     }
 
     /* Bang thong tin 5 Module phan cong nhom */
     Gfx_DrawRoundedRect(140, 595, 1000, 95, 8, COL_BG_PANEL, COL_BORDER);
-    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 618, "CAU TRUC 5 MODULE TRONG PROJECT C (PHAN CONG 5 THANH VIEN):", 2, COL_TEXT_GOLD);
+    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 618, "CẤU TRÚC 5 MODULE TRONG PROJECT C (PHÂN CÔNG 5 THÀNH VIÊN):", 2, COL_TEXT_GOLD);
     Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 646,
         "[1] circuit.c (Logic Simulation)   |   [2] levels.c (15 Levels & File I/O)   |   [3] renderer.c (2D PCB & Bezier)",
         1, COL_TEXT_WHITE);
@@ -129,9 +129,9 @@ static void DrawMainMenu(GameContext *game, const InputState *input, double now)
 
 static void DrawLevelSelect(GameContext *game, const InputState *input) {
     Gfx_DrawRoundedRect(30, 20, SCREEN_WIDTH - 60, 64, 8, COL_BG_PANEL, COL_BORDER);
-    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 52, "CHON MAN CHOI (15 THU THACH MACH LOGIC - MOI MAN < 5 PHUT)", 3, COL_TEXT_GOLD);
+    Gfx_DrawTextCentered(SCREEN_WIDTH / 2, 52, "CHỌN MÀN CHƠI (15 THỬ THÁCH MẠCH LOGIC - MỖI MÀN < 5 PHÚT)", 3, COL_TEXT_GOLD);
 
-    if (DrawButton(45, 32, 150, 40, "< VE MENU", COL_BG_CARD, input)) {
+    if (DrawButton(45, 32, 150, 40, "< VỀ MENU", COL_BG_CARD, input)) {
         game->screen = STATE_MAIN_MENU;
         return;
     }
@@ -140,13 +140,13 @@ static void DrawLevelSelect(GameContext *game, const InputState *input) {
     int total_stars = 0;
     for (int i = 0; i < TOTAL_LEVELS; i++) total_stars += game->progress.stars[i];
     char star_buf[64];
-    snprintf(star_buf, sizeof(star_buf), "Tong Sao: %d / %d *", total_stars, TOTAL_LEVELS * 3);
+    snprintf(star_buf, sizeof(star_buf), "Tổng Sao: %d / %d *", total_stars, TOTAL_LEVELS * 3);
     Gfx_DrawText(SCREEN_WIDTH - 230, 42, star_buf, 2, COL_WIRE_HIGH);
 
     const char *chap_names[3] = {
-        "CHUONG 1: CO BAN - NHAP MON CONG LOGIC (MAN 1 - 5)",
-        "CHUONG 2: TRUNG CAP - BIEN DOI BOOLE & DE MORGAN (MAN 6 - 10)",
-        "CHUONG 3: KY SU KTS BACH KHOA - MACH CHUC NANG (MAN 11 - 15)"
+        "CHƯƠNG 1: CƠ BẢN - NHẬP MÔN CÔNG LOGIC (MAN 1 - 5)",
+        "CHƯƠNG 2: TRUNG CẤP - BIẾN ĐỔI BOOLE & DE MORGAN (MAN 6 - 10)",
+        "CHƯƠNG 3: KỸ SƯ KTS BÁCH KHOA - MẠCH CHỨC NĂNG (MAN 11 - 15)"
     };
 
     for (int chap = 0; chap < 3; chap++) {
@@ -170,35 +170,37 @@ static void DrawLevelSelect(GameContext *game, const InputState *input) {
             Gfx_DrawRoundedRect(card_x, card_y, card_w, card_h, 8, bg, brd);
 
             char num_str[32];
-            snprintf(num_str, sizeof(num_str), "MAN %d", lvl->level_number);
+            snprintf(num_str, sizeof(num_str), "MÀN %d", lvl->level_number);
             Gfx_DrawText(card_x + 14, card_y + 14, num_str, 2, unlocked ? COL_WIRE_HIGH : COL_TEXT_MUTED);
 
             /* Ve so sao (1-3 sao) */
             int st = game->progress.stars[idx];
             char st_str[16];
+            
             snprintf(st_str, sizeof(st_str), "%s %s %s",
-                     (st >= 1) ? "[*]" : "[ ]",
-                     (st >= 2) ? "[*]" : "[ ]",
-                     (st >= 3) ? "[*]" : "[ ]");
+                     (st >= 1) ? "★" : "☆",
+                     (st >= 2) ? "★" : "☆",
+                     (st >= 3) ? "★" : "☆");
+            
             Gfx_DrawText(card_x + 112, card_y + 16, st_str, 1, st > 0 ? COL_TEXT_GOLD : COL_TEXT_MUTED);
 
-            /* Ten rut gon cua man */
+            /* Ten rut gon cua man (Da ho tro tu dong xuong dong va tang chieu cao de khong cat chu) */
             const char *short_title = strchr(lvl->title, ':');
             short_title = short_title ? (short_title + 2) : lvl->title;
-            Gfx_DrawText(card_x + 14, card_y + 50, short_title, 1, unlocked ? COL_TEXT_WHITE : COL_TEXT_MUTED);
+            Gfx_DrawTextWrapped(card_x + 14, card_y + 50, 197, 45, short_title, 1, unlocked ? COL_TEXT_WHITE : COL_TEXT_MUTED);
 
             char io_info[64];
             snprintf(io_info, sizeof(io_info), "Input: %d  |  Output: %d", lvl->num_inputs, lvl->num_outputs);
-            Gfx_DrawText(card_x + 14, card_y + 82, io_info, 1, COL_TEXT_MUTED);
+            Gfx_DrawText(card_x + 14, card_y + 94, io_info, 1, COL_TEXT_MUTED);
 
             if (unlocked) {
                 if (game->progress.best_time_sec[idx] > 0) {
                     char tbuf[48];
-                    snprintf(tbuf, sizeof(tbuf), "Ky luc: %ds (Toi uu: %d cong)",
+                    snprintf(tbuf, sizeof(tbuf), "Kỷ lục: %ds (Tối ưu: %d cổng)",
                              game->progress.best_time_sec[idx], lvl->optimal_gate_count);
-                    Gfx_DrawText(card_x + 14, card_y + 114, tbuf, 1, COL_ACCENT_GREEN);
+                    Gfx_DrawText(card_x + 14, card_y + 120, tbuf, 1, COL_ACCENT_GREEN);
                 } else {
-                    Gfx_DrawText(card_x + 14, card_y + 114, "Click de bat dau giai ->", 1, COL_TEXT_GOLD);
+                    Gfx_DrawText(card_x + 14, card_y + 120, "Click để bắt đầu giải ->", 1, COL_TEXT_GOLD);
                 }
 
                 if (hover && input->left_pressed) {
@@ -206,7 +208,7 @@ static void DrawLevelSelect(GameContext *game, const InputState *input) {
                     return;
                 }
             } else {
-                Gfx_DrawText(card_x + 14, card_y + 114, "[CHUA MO KHOA]", 1, COL_ACCENT_RED);
+                Gfx_DrawText(card_x + 14, card_y + 120, "[CHƯA MỞ KHÓA]", 1, COL_ACCENT_RED);
             }
         }
     }
@@ -221,9 +223,9 @@ static void CheckAndTriggerVictory(GameContext *game) {
         int used_gates = Circuit_CountUsedGates(&game->circuit);
 
         /* Tinh so sao (1 -> 3 sao):
-           - 3 sao: Hoan thanh < 5 phut (300s) VA so cong <= optimal_gate_count + 1
-           - 2 sao: Hoan thanh < 5 phut (300s)
-           - 1 sao: Hoan thanh > 5 phut */
+- 3 sao: Hoan thanh < 5 phut (300s) VA so cong <= optimal_gate_count + 1
+- 2 sao: Hoan thanh < 5 phut (300s)
+- 1 sao: Hoan thanh > 5 phut */
         int stars = 1;
         if (game->elapsed_seconds <= 300) {
             stars = 2;
@@ -244,10 +246,10 @@ static void CheckAndTriggerVictory(GameContext *game) {
             game->progress.unlocked_level = lvl->level_number + 1;
         }
         Progress_Save(&game->progress, SAVE_FILE_PATH);
-        Game_SetStatus(game, "CHUC MUNG! Mach cua ban da vuot qua 100% Bang Chan Tri!");
+        Game_SetStatus(game, "CHÚC MỪNG! Mạch của bạn đã vượt qua 100% Bảng Chân Trị!");
     } else {
         char msg[112];
-        snprintf(msg, sizeof(msg), "Mach chua chinh xac (%d/%d hang dung). Hay xem Bang Chan Tri ben phai!",
+        snprintf(msg, sizeof(msg), "Mạch chưa chính xác (%d/%d hàng đúng). Hãy xem Bảng Chân Trị bên phải!",
                  game->verify_res.passed_rows, game->verify_res.total_rows);
         Game_SetStatus(game, msg);
     }
@@ -260,7 +262,7 @@ static void DrawToolbox(GameContext *game, const InputState *input) {
     int tb_h = 108;
 
     Gfx_DrawRoundedRect(tb_x, tb_y, tb_w, tb_h, 8, COL_BG_PANEL, COL_BORDER);
-    Gfx_DrawText(tb_x + 14, tb_y + 8, "KHO LINH KIEN CONG LOGIC (CLICK DE THEM CONG VAO MACH):", 1, COL_TEXT_GOLD);
+    Gfx_DrawText(tb_x + 14, tb_y + 8, "KHO LINH KIỆN CỔNG LOGIC (CLICK ĐỂ THÊM CỔNG VÀO MẠCH):", 1, COL_TEXT_GOLD);
 
     const ComponentType gate_types[7] = {
         COMP_NOT, COMP_AND, COMP_OR, COMP_XOR, COMP_NAND, COMP_NOR, COMP_XNOR
@@ -318,14 +320,14 @@ static void DrawPlayingOrSandbox(GameContext *game, const InputState *input, dou
     /* 1. Thanh Header phia tren */
     Gfx_DrawRoundedRect(20, 12, SCREEN_WIDTH - 40, 88, 8, COL_BG_PANEL, COL_BORDER);
 
-    if (DrawButton(32, 24, 120, 34, is_sandbox ? "< MENU" : "< CHON MAN", COL_BG_CARD, input)) {
+    if (DrawButton(32, 24, 120, 34, is_sandbox ? "< MENU" : "< CHỌN MÀN", COL_BG_CARD, input)) {
         game->screen = is_sandbox ? STATE_MAIN_MENU : STATE_LEVEL_SELECT;
         return;
     }
 
     if (is_sandbox) {
-        Gfx_DrawText(168, 22, "PHONG THI NGHIEM TU DO (SANDBOX MODE)", 3, COL_WIRE_HIGH);
-        Gfx_DrawText(168, 56, "Click cong tac A, B, C de doi 0/1. Keo tha cong logic, noi day va quan sat tin hieu!", 1, COL_TEXT_WHITE);
+        Gfx_DrawText(168, 22, "PHÒNG THÍ NGHIỆM TỰ DO (SANDBOX MODE)", 3, COL_WIRE_HIGH);
+        Gfx_DrawText(168, 56, "Click công tắc A, B, C để đổi 0/1. Kéo thả cổng logic, nối dây và quan sát tín hiệu!", 1, COL_TEXT_WHITE);
     } else {
         Gfx_DrawText(168, 20, lvl->title, 3, COL_TEXT_GOLD);
         Gfx_DrawText(168, 54, lvl->story_desc, 1, COL_TEXT_WHITE);
@@ -334,26 +336,26 @@ static void DrawPlayingOrSandbox(GameContext *game, const InputState *input, dou
         int mins = game->elapsed_seconds / 60;
         int secs = game->elapsed_seconds % 60;
         char tstr[48];
-        snprintf(tstr, sizeof(tstr), "Thoi gian: %02d:%02d / 05:00", mins, secs);
+        snprintf(tstr, sizeof(tstr), "Thời gian: %02d:%02d / 05:00", mins, secs);
         Color32 tcol = (game->elapsed_seconds <= 300) ? COL_WIRE_HIGH : COL_ACCENT_WARN;
         Gfx_DrawText(730, 24, tstr, 2, tcol);
     }
 
     /* Cac nut chuc nang goc phai Header */
     if (!is_sandbox) {
-        if (DrawButton(945, 22, 95, 36, "GOI Y (H)", RGB32(95, 72, 28), input) || input->key_h_pressed) {
+        if (DrawButton(945, 22, 95, 36, "GỢI Ý (H)", RGB32(95, 72, 28), input) || input->key_h_pressed) {
             game->show_hint = !game->show_hint;
         }
     }
-    if (DrawButton(1048, 22, 95, 36, "XOA MACH", RGB32(95, 36, 46), input) || input->key_r_pressed) {
+    if (DrawButton(1048, 22, 95, 36, "XÓA MẠCH", RGB32(95, 36, 46), input) || input->key_r_pressed) {
         Circuit_ClearUserItems(&game->circuit);
         if (!is_sandbox) {
             Levels_VerifyCircuit(lvl, &game->circuit, &game->verify_res);
         }
-        Game_SetStatus(game, "Da xoa tat ca linh kien va day noi de lam lai.");
+        Game_SetStatus(game, "Đã xóa tất cả linh kiện và dây nối để làm lại.");
     }
     if (!is_sandbox) {
-        if (DrawButton(1150, 22, 98, 36, "CHAM DIEM", RGB32(24, 130, 82), input) || input->key_space_pressed) {
+        if (DrawButton(1150, 22, 98, 36, "CHẤM DIỂM", RGB32(24, 130, 82), input) || input->key_space_pressed) {
             CheckAndTriggerVictory(game);
         }
     }
@@ -366,7 +368,7 @@ static void DrawPlayingOrSandbox(GameContext *game, const InputState *input, dou
     if (!is_sandbox && game->show_hint) {
         Gfx_DrawRoundedRect(35, 118, 850, 38, 6, RGB32(60, 48, 20), COL_TEXT_GOLD);
         char hbuf[256];
-        snprintf(hbuf, sizeof(hbuf), "GOI Y GIAI: %s", lvl->hint);
+        snprintf(hbuf, sizeof(hbuf), "GỢI Ý GIẢI: %s", lvl->hint);
         Gfx_DrawText(48, 129, hbuf, 1, COL_TEXT_GOLD);
     }
 
@@ -397,33 +399,33 @@ static void DrawPlayingOrSandbox(GameContext *game, const InputState *input, dou
         int mh = 310;
 
         Gfx_DrawRoundedRect(mx, my, mw, mh, 12, COL_BG_PANEL, COL_WIRE_HIGH);
-        Gfx_DrawTextCentered(mx + mw / 2, my + 38, "HOAN THANH MAN CHOI!", 3, COL_WIRE_HIGH);
+        Gfx_DrawTextCentered(mx + mw / 2, my + 38, "HOÀN THÀNH MÀN CHƠI!", 3, COL_WIRE_HIGH);
         Gfx_DrawTextCentered(mx + mw / 2, my + 74, lvl->title, 2, COL_TEXT_WHITE);
 
         char star_line[64];
-        snprintf(star_line, sizeof(star_line), "DANH GIA:   %s   %s   %s",
-                 (game->earned_stars >= 1) ? "[* SAO *]" : "[ ]",
-                 (game->earned_stars >= 2) ? "[* SAO *]" : "[ ]",
-                 (game->earned_stars >= 3) ? "[* SAO *]" : "[ ]");
+        snprintf(star_line, sizeof(star_line), "ĐÁNH GIÁ:   %s   %s   %s",
+                 (game->earned_stars >= 1) ? "★" : "☆",
+                 (game->earned_stars >= 2) ? "★" : "☆",
+                 (game->earned_stars >= 3) ? "★" : "☆");
         Gfx_DrawTextCentered(mx + mw / 2, my + 116, star_line, 2, COL_TEXT_GOLD);
 
         char stat_line[128];
         int used = Circuit_CountUsedGates(&game->circuit);
         snprintf(stat_line, sizeof(stat_line),
-                 "Thoi gian giai: %d giay   |   So cong su dung: %d (Toi uu: %d)",
+                 "Thời gian giải: %d giây   |   Số cổng sử dụng: %d (Tối ưu: %d)",
                  game->elapsed_seconds, used, lvl->optimal_gate_count);
         Gfx_DrawTextCentered(mx + mw / 2, my + 158, stat_line, 1, COL_TEXT_MUTED);
 
-        if (DrawButton(mx + 45, my + 220, 195, 48, "CHOI LAI MAN NAY", COL_BG_CARD, input)) {
+        if (DrawButton(mx + 45, my + 220, 195, 48, "CHƠI LẠI MÀN NÀY", COL_BG_CARD, input)) {
             game->level_completed_modal = false;
         }
 
         if (game->current_level_idx + 1 < TOTAL_LEVELS) {
-            if (DrawButton(mx + 275, my + 220, 205, 48, "MAN TIEP THEO ->", RGB32(24, 130, 82), input)) {
+            if (DrawButton(mx + 275, my + 220, 205, 48, "MÀN TIẾP THEO ->", RGB32(24, 130, 82), input)) {
                 Game_LoadLevel(game, game->current_level_idx + 1);
             }
         } else {
-            if (DrawButton(mx + 275, my + 220, 205, 48, "VE CHON MAN", RGB32(24, 130, 82), input)) {
+            if (DrawButton(mx + 275, my + 220, 205, 48, "VỀ CHỌN MÀN", RGB32(24, 130, 82), input)) {
                 game->screen = STATE_LEVEL_SELECT;
             }
         }

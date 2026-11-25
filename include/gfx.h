@@ -62,6 +62,7 @@ void Gfx_DrawBezierWire(float x0, float y0, float x1, float y1, bool is_high, do
 /* Cac ham ve chu (Font sizes: 1 = Nho 13px, 2 = Vua 16px, 3 = Lon 22px, 4 = Tieu de 30px) */
 void Gfx_DrawText(int x, int y, const char *text, int font_size, Color32 color);
 void Gfx_DrawTextCentered(int cx, int cy, const char *text, int font_size, Color32 color);
+void Gfx_DrawTextWrapped(int x, int y, int w, int h, const char *text, int font_size, Color32 color);
 
 /* Kiem tra diem (mx, my) co nam trong hinh chu nhat khong */
 bool Gfx_PointInRect(int mx, int my, int x, int y, int w, int h);

@@ -11,6 +11,9 @@
 #include <stdio.h>
 #include <string.h>
 
+extern void Renderer_InitGateImages(void);
+extern void Renderer_FreeGateImages(void);
+
 /* Chay Unit Test tu dong kiem tra Engine mo phong mach (dung khi chay: circuit_puzzle.exe --test) */
 static int RunSelfTest(void) {
     printf("=== KIEM TRA TU DONG CIRCUIT SIMULATION ENGINE (15 LEVELS) ===\n");
